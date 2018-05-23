@@ -3,9 +3,11 @@ import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.MediaTracker;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Vector;
 import static src.Sprite.getSprite;
 
 /**
@@ -26,6 +28,11 @@ public class Aquarium extends Frame implements Runnable
     
     //Thread
     Thread thread;
+    
+    int numberOfFish = 3;
+    int sleepTime = 110;
+    Vector<Fish> fishes = new Vector<>();
+    boolean runOk = true;
     
     Aquarium()
     {
@@ -63,12 +70,22 @@ public class Aquarium extends Frame implements Runnable
         this.addWindowListener(new WindowAdapter(){
             public void windowClosing(
                     WindowEvent windowEvent){
-                        System.exit(0);
+                        runOk = false; //end the thread
+                        System.exit(0); //exit system
             }
            
         }
         );
     }//end constructor 
+    
+    public void update(Graphics g)
+    {
+        memoryGraphics.drawImage(aquariumBackground, 0, 0, this);
+        for(int i = 0; i < numberOfFish; i++){
+            ((Fish)fishes.elementAt(i)).drawFishImage(memoryGraphics);
+        }
+        g.drawImage(memoryImage, 0, 0, this);
+    }//end update
     
     public static void main(String[] args)
     {
@@ -77,6 +94,34 @@ public class Aquarium extends Frame implements Runnable
 
     @Override
     public void run() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-}
+        Rectangle edges = new Rectangle(0 + getInsets().left, 
+        0 + getInsets().top, getSize().width - (getInsets().left 
+                + getInsets().right), getSize().height - (getInsets().top
+                        + getInsets().bottom));
+        
+        for(int i = 0; i < numberOfFish; i++){
+            fishes.add(new Fish(fishImages[0], fishImages[1], edges, thread));
+            try{
+                Thread.sleep(20);
+            }
+            catch(Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
+        Fish fish;
+        while(runOk){
+            for(int i = 0; i < numberOfFish; i++){
+                fish = (Fish)fishes.elementAt(i);
+                fish.swim();
+            }
+            
+            try{
+                Thread.sleep(sleepTime);
+            }
+            catch(Exception e){
+                System.out.println(e.getMessage());
+            }
+            repaint();
+        }//end while
+    }//end run
+}//end Aquarium

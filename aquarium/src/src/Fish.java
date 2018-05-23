@@ -20,4 +20,17 @@ public class Fish {
     Rectangle edges;
     Random random;
     
+    public Fish(Image img1, Image img2, Rectangle edges, Component tank)
+    {
+        random = new Random(System.currentTimeMillis());
+        this.tank = tank;
+        this.image1 = img1;
+        this.image2 = img2;
+        this.edges = edges;
+        this.location = new Point(
+            100 + (Math.abs(random.nextInt()) % 300),
+            100 + (Math.abs(100 + random.nextInt()) % 100));
+        this.velocity = new Point(random.nextInt() % 8, random.nextInt());
+    }//end constructor
+    
 }

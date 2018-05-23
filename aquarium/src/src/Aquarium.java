@@ -40,10 +40,10 @@ public class Aquarium extends Frame implements Runnable
         
         tracker = new MediaTracker(this);
         
-        fishImages[0] = Toolkit.getDefaultToolkit().getImage("resources/fish1.gif");
+        fishImages[0] = getSprite("fish1");
         tracker.addImage(fishImages[0], 0);
         
-        fishImages[1] = Toolkit.getDefaultToolkit().getImage("resources/fish2.gif");
+        fishImages[1] = Toolkit.getDefaultToolkit().getImage("fish2");
         tracker.addImage(fishImages[1], 0);
         
         aquariumBackground = getSprite("background");
@@ -100,7 +100,7 @@ public class Aquarium extends Frame implements Runnable
                         + getInsets().bottom));
         
         for(int i = 0; i < numberOfFish; i++){
-            fishes.add(new Fish(fishImages[0], fishImages[1], edges, thread));
+            fishes.add(new Fish(fishImages[0], fishImages[1], edges, this));
             try{
                 Thread.sleep(20);
             }

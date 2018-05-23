@@ -14,7 +14,7 @@ public abstract class Sprite {
      static public Image getSprite(String name)
     {   
         try{
-         img = Toolkit.getDefaultToolkit().getImage(Sprite.class.getResource("resources/" + name + ".gif"));
+         img = Toolkit.getDefaultToolkit().getImage(Sprite.class.getResource(name + ".gif"));
          return img;
         }catch(Exception e){
             System.out.println(e.getMessage());

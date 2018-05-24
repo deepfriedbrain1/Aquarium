@@ -43,7 +43,7 @@ public class Aquarium extends Frame implements Runnable
         fishImages[0] = getSprite("fish1");
         tracker.addImage(fishImages[0], 0);
         
-        fishImages[1] = Toolkit.getDefaultToolkit().getImage("fish2");
+        fishImages[1] = getSprite("fish2");
         tracker.addImage(fishImages[1], 0);
         
         aquariumBackground = getSprite("background");

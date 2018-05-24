@@ -4,14 +4,14 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.MediaTracker;
 import java.awt.Rectangle;
-import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Vector;
+import java.util.ArrayList;
+
 import static src.Sprite.getSprite;
 
 /**
- *
+ * Multithreaded Aquarium 
  * @author Alberto Fernandez Saucedo
  */
 public class Aquarium extends Frame implements Runnable
@@ -26,15 +26,16 @@ public class Aquarium extends Frame implements Runnable
     //Alerts if there is an issue loading images
     MediaTracker tracker;
     
-    //Thread
+    //Execution stream for fish drawing and movement
     Thread thread;
     
-    int numberOfFish = 3;
+    int numberOfFish = 5;
     int sleepTime = 110;
-    Vector<Fish> fishes = new Vector<>();
+    
+    ArrayList<Fish> fishes = new ArrayList<>();
     boolean runOk = true;
     
-    Aquarium()
+    public Aquarium()
     {
         setTitle("The Aquarium");
         
@@ -51,7 +52,7 @@ public class Aquarium extends Frame implements Runnable
         
         try{
             tracker.waitForID(0);
-        }catch(Exception e){
+        }catch(InterruptedException e){
             System.out.println(e.getMessage());
         }
         
@@ -68,10 +69,11 @@ public class Aquarium extends Frame implements Runnable
         thread.start();
         
         this.addWindowListener(new WindowAdapter(){
+            @Override
             public void windowClosing(
                     WindowEvent windowEvent){
                         runOk = false; //end the thread
-                        System.exit(0); //exit system
+                        System.exit(0); //exit the program
             }
            
         }
@@ -82,15 +84,10 @@ public class Aquarium extends Frame implements Runnable
     {
         memoryGraphics.drawImage(aquariumBackground, 0, 0, this);
         for(int i = 0; i < numberOfFish; i++){
-            ((Fish)fishes.elementAt(i)).drawFishImage(memoryGraphics);
+            ((Fish)fishes.get(i)).drawFishImage(memoryGraphics);
         }
         g.drawImage(memoryImage, 0, 0, this);
     }//end update
-    
-    public static void main(String[] args)
-    {
-        new Aquarium();
-    }
 
     @Override
     public void run() {
@@ -111,7 +108,7 @@ public class Aquarium extends Frame implements Runnable
         Fish fish;
         while(runOk){
             for(int i = 0; i < numberOfFish; i++){
-                fish = (Fish)fishes.elementAt(i);
+                fish = (Fish)fishes.get(i);
                 fish.swim();
             }
             
@@ -124,4 +121,9 @@ public class Aquarium extends Frame implements Runnable
             repaint();
         }//end while
     }//end run
+    
+    public static void main(String[] args)
+    {
+        new Aquarium();
+    }
 }//end Aquarium
